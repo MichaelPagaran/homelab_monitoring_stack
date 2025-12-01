@@ -2,14 +2,11 @@ services:
   prometheus:
     image: prom/prometheus
     container_name: prometheus
-    # Access Prometheus via the web browser at http://<SERVER_IP>:9090
     ports:
       - "9090:9090"
     volumes:
-      # CRITICAL FIX: The config file is directly in the current directory.
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro 
-      # Persistence for Prometheus metrics data
-      - ./prometheus_data:/prometheus 
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./prometheus_data:/prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
@@ -18,39 +15,33 @@ services:
     networks:
       - app_net
     restart: unless-stopped
+    
+    # CRITICAL FIX: Maps the hostname 'server-host' to the Server VM's IP address.
+    # This solves the 'no route to host' error by bypassing complex routing.
+    extra_hosts:
+      - "server-host:${SERVERIP}" 
 
   node_exporter:
     image: prom/node-exporter
     container_name: node_exporter
-    
-    # Required for Node Exporter to access /proc and device nodes (for LUKS/disk stats)
     privileged: true
-    
-    # Required to expose host's IP/ports and read system stats correctly
     network_mode: "host" 
-    
-    # Mount host system metrics directories
     volumes:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
       - /:/rootfs:ro
-    
     command:
-      # Tell the exporter where to find the mounted host directories
       - '--path.procfs=/host/proc'
       - '--path.sysfs=/host/sys'
       - '--collector.filesystem.mount-points-exclude=^/(dev|proc|sys|var/lib/docker/|var/run/|host|rootfs)($$|/)'
-
     restart: unless-stopped
 
   grafana:
     image: grafana/grafana
     container_name: grafana
-    # Access Grafana via the web browser at http://<SERVER_IP>:3000
     ports:
       - "3000:3000"
     volumes:
-      # Persistence for Grafana settings, dashboards, and databases
       - ./grafana_data:/var/lib/grafana
     networks:
       - app_net
@@ -59,4 +50,3 @@ services:
 networks:
   app_net:
     external: true
-
