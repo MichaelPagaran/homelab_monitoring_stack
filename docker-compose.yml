@@ -38,8 +38,6 @@ services:
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
-      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
-      - '--web.console.html=/usr/share/prometheus/consoles'
     # Use the variable from .env
     ports:
       - "${PROMETHEUS_PORT}:9090"
@@ -65,4 +63,5 @@ services:
     restart: unless-stopped
     depends_on:
       - prometheus
+
 
