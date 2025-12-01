@@ -46,10 +46,10 @@ NODE_EXPORTER_PORT=9100
 The `docker-compose.yml` file uses the variables from `.env` and specifies the necessary host permissions for the Node Exporter.
 
 Key Configurations:
-    - Networking: All services share the `monitoring` bridge network.
-    - Node Exporter: Uses `pid: host` and mounts host directories (`/proc`, `/sys`, `/`) to read system metrics.
-    - Prometheus: Mounts the local `prometheus.yml` configuration and uses a persistent volume for data.
-    - Grafana: Uses the `GF_ADMIN_PASSWORD` from the `.env` file.
+  - Networking: All services share the `monitoring` bridge network.
+  - Node Exporter: Uses `pid: host` and mounts host directories (`/proc`, `/sys`, `/`) to read system metrics.
+  - Prometheus: Mounts the local `prometheus.yml` configuration and uses a persistent volume for data.
+  - Grafana: Uses the `GF_ADMIN_PASSWORD` from the `.env` file.
 
 Important Fix: We removed the deprecated flags (`--web.console.html` and `--web.console.libraries`) from the Prometheus command that caused container restarts.
 
@@ -163,5 +163,6 @@ To visualize your server metrics, you must configure Prometheus as a data source
     - Go to Dashboards → Import.
     - Use the ID `1860` (Node Exporter Full dashboard).
     - Select your newly created Prometheus data source.
+
 
 
