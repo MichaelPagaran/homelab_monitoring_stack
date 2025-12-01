@@ -1,13 +1,18 @@
-# /docker/monitoring_stack/prometheus.yml (Remains the same)
+# /docker/monitoring_stack/prometheus.yml (Corrected)
 
 global:
+  # Sets the default interval for scraping targets
   scrape_interval: 15s 
 
 scrape_configs:
+  # Job 1: Scrapes Prometheus itself (default monitoring)
   - job_name: 'prometheus'
     static_configs:
       - targets: ['localhost:9090']
 
-  - job_name: 'node-exporter'
+  # Job 2: Scrapes the Node Exporter
+  - job_name: 'node_exporter'
+    # CRITICAL FIX: Node Exporter is in host mode, so Prometheus must use the host's
+    # loopback address (localhost) to reach its exposed port 9100.
     static_configs:
-      - targets: ['node-exporter:9100']
+      - targets: ['localhost:9100']
