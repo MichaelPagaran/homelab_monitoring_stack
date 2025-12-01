@@ -164,3 +164,4 @@ To visualize your server metrics, you must configure Prometheus as a data source
     - Use the ID `1860` (Node Exporter Full dashboard).
     - Select your newly created Prometheus data source.
 
+
