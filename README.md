@@ -46,10 +46,10 @@ NODE_EXPORTER_PORT=9100
 The `docker-compose.yml` file uses the variables from `.env` and specifies the necessary host permissions for the Node Exporter.
 
 Key Configurations:
-- Networking: All services share the `monitoring` bridge network.
-- Node Exporter: Uses `pid: host` and mounts host directories (`/proc`, `/sys`, `/`) to read system metrics.
-- Prometheus: Mounts the local `prometheus.yml` configuration and uses a persistent volume for data.
-- Grafana: Uses the `GF_ADMIN_PASSWORD` from the `.env` file.
+    - Networking: All services share the `monitoring` bridge network.
+    - Node Exporter: Uses `pid: host` and mounts host directories (`/proc`, `/sys`, `/`) to read system metrics.
+    - Prometheus: Mounts the local `prometheus.yml` configuration and uses a persistent volume for data.
+    - Grafana: Uses the `GF_ADMIN_PASSWORD` from the `.env` file.
 
 Important Fix: We removed the deprecated flags (`--web.console.html` and `--web.console.libraries`) from the Prometheus command that caused container restarts.
 
@@ -136,18 +136,18 @@ scrape_configs:
 
 ### Step 5: Deployment and Access
 1. Deploy the stack:
-  ```bash
-  cd /docker/monitoring_stack/
-  docker compose up -d
-  ```
+    ```bash
+    cd /docker/monitoring_stack/
+    docker compose up -d
+    ```
 2. Verify container status:
-  ```bash
-  docker compose ps
-  ```
+    ```bash
+    docker compose ps
+    ```
   (Ensure all containers are in the Up state.)
 3. Access UIs (using your server's IP):
-  - Prometheus: `http://<Your-Server-IP>:<PROMETHEUS_PORT>`
-  - Grafana: `http://<Your-Server-IP>:<GRAFANA_PORT>`
+    - Prometheus: `http://<Your-Server-IP>:<PROMETHEUS_PORT>`
+    - Grafana: `http://<Your-Server-IP>:<GRAFANA_PORT>`
 
 ## 📊 Post-Deployment Grafana Setup
 
@@ -155,11 +155,12 @@ To visualize your server metrics, you must configure Prometheus as a data source
 
 1. Log in to Grafana (`admin` / `your_secure_grafana_password`)
 2. Add Data Source:
-  - Go to Configuration → Data Sources.
-  - Select Prometheus.
-  - Set the URL to: `http://prometheus:9090` (using the internal service name).
-  - Click Save & Test.
+    - Go to Configuration → Data Sources.
+    - Select Prometheus.
+    - Set the URL to: `http://prometheus:9090` (using the internal service name).
+    - Click Save & Test.
 3. Import Node Exporter Dashboard:
-  - Go to Dashboards → Import.
-  - Use the ID `1860` (Node Exporter Full dashboard).
-  - Select your newly created Prometheus data source.
+    - Go to Dashboards → Import.
+    - Use the ID `1860` (Node Exporter Full dashboard).
+    - Select your newly created Prometheus data source.
+
