@@ -9,6 +9,6 @@ scrape_configs:
       - targets: ['localhost:9090']
 
   - job_name: 'node_exporter'
-    # CRITICAL FIX: Use the explicit IPv4 address 10.0.2.15 to bypass the IPv6/localhost issue.
+    # Use the custom hostname defined in the docker-compose.yml 'extra_hosts' section
     static_configs:
-      - targets: ['10.0.2.15:9100']
+      - targets: ['server-host:9100']
