@@ -1,4 +1,4 @@
-# /docker/monitoring_stack/prometheus.yml (Ensure this is correct)
+# /docker/monitoring_stack/prometheus.yml
 
 global:
   scrape_interval: 15s 
@@ -9,6 +9,6 @@ scrape_configs:
       - targets: ['localhost:9090']
 
   - job_name: 'node_exporter'
-    # MUST be localhost:9100 because node_exporter is in host mode
+    # CRITICAL FIX: Use the explicit IPv4 address 10.0.2.15 to bypass the IPv6/localhost issue.
     static_configs:
-      - targets: ['localhost:9100']
+      - targets: ['10.0.2.15:9100']
