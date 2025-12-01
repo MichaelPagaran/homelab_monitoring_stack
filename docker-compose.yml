@@ -1,7 +1,4 @@
 # /docker/monitoring_stack/docker-compose.yml
-
-version: '3'
-
 volumes:
   prometheus_data: {}
   grafana_data: {}
@@ -68,3 +65,4 @@ services:
     restart: unless-stopped
     depends_on:
       - prometheus
+
