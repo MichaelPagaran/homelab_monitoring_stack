@@ -3,13 +3,14 @@ services:
   prometheus:
     image: prom/prometheus
     container_name: prometheus
+    # Access Prometheus via the web browser at http://<SERVER_IP>:9090
     ports:
       - "9090:9090"
     volumes:
-      # Mount the Prometheus configuration file
-      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro 
-      # Persistence for metrics data
-      - ./prometheus/data:/prometheus
+      # CRITICAL FIX: The config file is directly in the current directory.
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro 
+      # Persistence for Prometheus metrics data
+      - ./prometheus_data:/prometheus 
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
@@ -23,13 +24,13 @@ services:
     image: prom/node-exporter
     container_name: node_exporter
     
-    # CRITICAL: Required to access /proc and device nodes
+    # Required for Node Exporter to access /proc and device nodes (for LUKS/disk stats)
     privileged: true
     
-    # CRITICAL: Required to expose host's IP/ports and read system stats correctly
+    # Required to expose host's IP/ports and read system stats correctly
     network_mode: "host" 
     
-    # CRITICAL: Mount host system metrics directories
+    # Mount host system metrics directories
     volumes:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
@@ -46,11 +47,12 @@ services:
   grafana:
     image: grafana/grafana
     container_name: grafana
+    # Access Grafana via the web browser at http://<SERVER_IP>:3000
     ports:
       - "3000:3000"
     volumes:
       # Persistence for Grafana settings, dashboards, and databases
-      - ./grafana/data:/var/lib/grafana
+      - ./grafana_data:/var/lib/grafana
     networks:
       - app_net
     restart: unless-stopped
